@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-task-list',
+  selector: 'tm-task-list',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
-export class TaskListComponent {
-
-}
+export class TaskListComponent {}

@@ -1,4 +1,4 @@
-import { TaskStatus } from './task-status.enum';
+import { TaskStatus } from '@app/core/models/task-status.enum';
 
 export interface Task {
   id: string;
