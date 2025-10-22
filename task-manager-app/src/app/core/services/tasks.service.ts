@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { tap, map, debounceTime } from 'rxjs/operators';
-import { Task } from '@core/models/task.model';
+import { CreateTaskType, Task, UpdateTaskType } from '@core/models/task.model';
 import { environment } from '@environments/environment';
 import { API_ENDPOINTS } from '@app/core/constants/api.constants';
 
@@ -49,6 +49,24 @@ export class TasksService {
     return this.httpClient
       .get<Task>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`)
       .pipe(tap(() => this.loadingState$.next(false)));
+  }
+
+  createTask(task: CreateTaskType): Observable<void> {
+    this.loadingState$.next(true);
+
+    return this.httpClient.post<void>(
+      `${this.baseUrl}${API_ENDPOINTS.TASKS}`,
+      task
+    );
+  }
+
+  updateTask(id: string, task: UpdateTaskType): Observable<void> {
+    this.loadingState$.next(true);
+
+    return this.httpClient.put<void>(
+      `${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`,
+      task
+    );
   }
 
   deleteTask(id: string): Observable<void> {

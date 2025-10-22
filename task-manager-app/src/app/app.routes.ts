@@ -15,4 +15,18 @@ export const routes: Routes = [
       ),
     resolve: { tasks: TasksResolver },
   },
+  {
+    path: 'tasks/create',
+    loadComponent: () =>
+      import('./features/task-form/task-form.component').then(
+        (m) => m.TaskFormComponent
+      ),
+  },
+  {
+    path: 'tasks/edit/:id',
+    loadComponent: () =>
+      import('./features/task-form/task-form.component').then(
+        (m) => m.TaskFormComponent
+      ),
+  },
 ];

@@ -22,7 +22,7 @@
               class="status-badge"
               [ngClass]="'status-badge--' + task.status"
             >
-              {{ task.status }}
+              {{ getStatusLabel(task.status) }}
             </span>
             <span class="task-date">
               <mat-icon>schedule</mat-icon>
