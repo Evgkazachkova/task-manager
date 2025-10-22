@@ -16,7 +16,6 @@ import { Task } from '@app/core/models/task.model';
 export class TaskListComponent {
   private readonly tasksService = inject(TasksService);
 
-  loading = false;
   tasks$ = this.tasksService.tasks$;
 
   editTask(taskId: string) {}

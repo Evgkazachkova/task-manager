@@ -1,7 +1,7 @@
 .task-list-container {
-  padding: 24px;
+  padding: 0 24px;
   max-width: 900px;
-  margin: 0 auto;
+  margin: 0 auto 20px;
 }
 
 .tasks-list {
@@ -89,4 +89,36 @@
 
 .task-actions {
   gap: 4px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: #666;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    color: #ccc;
+  }
+
+  h3 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    font-weight: 400;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 400px;
+  }
 }

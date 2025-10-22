@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { tap, map, debounceTime } from 'rxjs/operators';
 import { Task } from '@core/models/task.model';
 import { environment } from '@environments/environment';
 import { API_ENDPOINTS } from '@app/core/constants/api.constants';
@@ -15,9 +15,15 @@ export class TasksService {
 
   private tasksCache$ = new BehaviorSubject<Task[]>([]);
   private loadingState$ = new BehaviorSubject<boolean>(false);
+  private searchQuery$ = new BehaviorSubject<string>('');
 
   get tasks$(): Observable<Task[]> {
-    return this.tasksCache$.asObservable();
+    return combineLatest([
+      this.tasksCache$.asObservable(),
+      this.searchQuery$.pipe(debounceTime(300)),
+    ]).pipe(
+      map(([tasks, searchQuery]) => this.filterTasks(tasks, searchQuery))
+    );
   }
 
   get loading$(): Observable<boolean> {
@@ -58,5 +64,22 @@ export class TasksService {
           this.loadingState$.next(false);
         })
       );
+  }
+
+  setSearchQuery(query: string): void {
+    this.searchQuery$.next(query.trim());
+  }
+
+  clearSearch(): void {
+    this.searchQuery$.next('');
+  }
+
+  private filterTasks(tasks: Task[], searchQuery: string): Task[] {
+    if (!searchQuery) {
+      return tasks;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return tasks.filter((task) => task.title.toLowerCase().includes(query));
   }
 }

@@ -1,5 +1,11 @@
 <div class="task-list-container">
   <div class="tasks-list">
+    <div *ngIf="(tasks$ | async)?.length === 0" class="empty-state">
+      <mat-icon>task_alt</mat-icon>
+      <h3>Задач не найдено</h3>
+      <p>Попробуйте изменить поисковый запрос или создать новую задачу</p>
+    </div>
+
     <mat-card
       *ngFor="let task of tasks$ | async; trackBy: trackByTaskId"
       class="task-card"

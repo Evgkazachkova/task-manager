@@ -1,0 +1,25 @@
+<div class="search-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Поиск задач</mat-label>
+    <input
+      matInput
+      placeholder="Введите название задачи..."
+      [value]="searchQuery"
+      (input)="onSearchInput($event)"
+      aria-label="Поиск задач"
+      autocomplete="off"
+    />
+    <button
+      *ngIf="searchQuery"
+      matSuffix
+      mat-icon-button
+      aria-label="Очистить поиск"
+      color="primary"
+      (click)="onClearSearch()"
+      class="clear-button"
+      title="Очистить поиск"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
