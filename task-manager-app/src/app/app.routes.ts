@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { TasksResolver } from '@app/core/resolvers/tasks.resolver';
 
 export const routes: Routes = [
   {
@@ -9,8 +10,9 @@ export const routes: Routes = [
   {
     path: 'tasks',
     loadComponent: () =>
-      import('./features/task-list/task-list.component').then(
-        (m) => m.TaskListComponent
+      import('./layout/layout-component/layout.component').then(
+        (m) => m.LayoutComponent
       ),
+    resolve: { tasks: TasksResolver },
   },
 ];

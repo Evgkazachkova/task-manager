@@ -1,3 +1,49 @@
 <div class="task-list-container">
-  <h1>Task List</h1>
+  <div class="tasks-list">
+    <mat-card
+      *ngFor="let task of tasks$ | async; trackBy: trackByTaskId"
+      class="task-card"
+    >
+      <div class="task-card-main">
+        <div class="task-info">
+          <h3 class="task-info__title">{{ task.title }}</h3>
+          <p class="task-info__description">
+            {{ task.description || "Без описания" }}
+          </p>
+
+          <div class="task-meta">
+            <span
+              class="status-badge"
+              [ngClass]="'status-badge--' + task.status"
+            >
+              {{ task.status }}
+            </span>
+            <span class="task-date">
+              <mat-icon>schedule</mat-icon>
+              {{ task.createdAt | date : "short" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="task-actions">
+          <button
+            mat-icon-button
+            color="primary"
+            title="edit"
+            (click)="editTask(task.id)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            title="delete"
+            (click)="deleteTask(task.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
 </div>
