@@ -8,6 +8,9 @@ import { TasksService } from '@app/core/services/tasks.service';
 import { Task } from '@app/core/models/task.model';
 import { TaskStatus } from '@app/core/models/task-status.enum';
 import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/confirm-dialog.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'tm-task-list',
@@ -19,6 +22,7 @@ import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
 export class TaskListComponent {
   private readonly tasksService = inject(TasksService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   tasks$ = this.tasksService.tasks$;
 
@@ -26,9 +30,26 @@ export class TaskListComponent {
     this.router.navigate(['/tasks/edit', taskId]);
   }
 
-  deleteTask(taskId: string) {}
+  deleteTask(taskId: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Вы уверены, что хотите удалить задачу?',
+        message: 'Эта задача будет удалена безвозвратно.',
+      },
+    });
 
-  trackByTaskId(index: number, task: Task): string {
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.tasksService.deleteTask(taskId).pipe(take(1)).subscribe();
+        }
+      });
+  }
+
+  trackByTaskId(task: Task): string {
     return task.id;
   }
 
