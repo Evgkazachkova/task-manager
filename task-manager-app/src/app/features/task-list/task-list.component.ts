@@ -47,6 +47,8 @@ export class TaskListComponent {
 
   deleteTask(taskId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      autoFocus: false,
+      restoreFocus: false,
       width: '400px',
       data: {
         title: 'Вы уверены, что хотите удалить задачу?',

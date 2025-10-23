@@ -147,6 +147,8 @@ export class TaskFormComponent implements OnInit {
   onCancel(): void {
     if (this.taskFormGroup.dirty) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        autoFocus: false,
+        restoreFocus: false,
         width: '400px',
         data: {
           title: 'Несохраненные изменения',

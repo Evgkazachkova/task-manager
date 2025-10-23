@@ -7,11 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
-export interface ConfirmDialogData {
-  title: string;
-  message: string;
-}
+import { ConfirmDialogData } from '@app/core/models/confirm-dialog.model';
 
 @Component({
   selector: 'tm-confirm-dialog',
