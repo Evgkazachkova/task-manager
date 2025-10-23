@@ -1,11 +1,34 @@
 <div class="task-list-container">
-
   <div class="tasks-stats" *ngIf="tasksStats()">
     <mat-chip-set>
-      <mat-chip>Всего: {{ tasksStats().total }}</mat-chip>
-      <mat-chip>К выполнению: {{ tasksStats().todo }}</mat-chip>
-      <mat-chip>В процессе: {{ tasksStats().inprogress }}</mat-chip>
-      <mat-chip>Завершено: {{ tasksStats().completed }}</mat-chip>
+      <mat-chip
+        [class.active]="!statusFilter()"
+        (click)="clearStatusFilter()"
+        class="clickable-chip"
+      >
+        Всего: {{ tasksStats().total }}
+      </mat-chip>
+      <mat-chip
+        [class.active]="isStatusFilterActive('todo')"
+        (click)="filterByStatus('todo')"
+        class="clickable-chip"
+      >
+        К выполнению: {{ tasksStats().todo }}
+      </mat-chip>
+      <mat-chip
+        [class.active]="isStatusFilterActive('inprogress')"
+        (click)="filterByStatus('inprogress')"
+        class="clickable-chip"
+      >
+        В процессе: {{ tasksStats().inprogress }}
+      </mat-chip>
+      <mat-chip
+        [class.active]="isStatusFilterActive('completed')"
+        (click)="filterByStatus('completed')"
+        class="clickable-chip"
+      >
+        Завершено: {{ tasksStats().completed }}
+      </mat-chip>
     </mat-chip-set>
   </div>
 

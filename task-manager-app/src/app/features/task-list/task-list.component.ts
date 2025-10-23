@@ -35,6 +35,7 @@ export class TaskListComponent {
   readonly tasks = this.tasksService.filteredTasks;
   readonly isLoading = this.tasksService.isLoading;
   readonly tasksStats = this.tasksService.tasksStats;
+  readonly statusFilter = this.tasksService.statusFilter;
 
   readonly hasTasks = computed(() => this.tasks().length > 0);
 
@@ -70,5 +71,17 @@ export class TaskListComponent {
 
   getStatusLabel(status: TaskStatus): string {
     return TaskStatusUtils.getStatusLabel(status);
+  }
+
+  filterByStatus(status: string | null): void {
+    this.tasksService.setStatusFilter(status);
+  }
+
+  clearStatusFilter(): void {
+    this.tasksService.clearStatusFilter();
+  }
+
+  isStatusFilterActive(status: string): boolean {
+    return this.statusFilter() === status;
   }
 }

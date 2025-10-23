@@ -15,12 +15,14 @@ export class TasksService {
 
   readonly tasks = signal<Task[]>([]);
   readonly searchQuery = signal<string>('');
+  readonly statusFilter = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
 
   readonly filteredTasks = computed(() => {
     const tasks = this.tasks();
     const searchQuery = this.searchQuery();
-    return this.filterTasks(tasks, searchQuery);
+    const statusFilter = this.statusFilter();
+    return this.filterTasks(tasks, searchQuery, statusFilter);
   });
 
   readonly tasksStats = computed(() => {
@@ -92,12 +94,34 @@ export class TasksService {
     this.searchQuery.set('');
   }
 
-  private filterTasks(tasks: Task[], searchQuery: string): Task[] {
-    if (!searchQuery) {
-      return tasks;
+  setStatusFilter(status: string | null): void {
+    this.statusFilter.set(status);
+  }
+
+  clearStatusFilter(): void {
+    this.statusFilter.set(null);
+  }
+
+  private filterTasks(
+    tasks: Task[],
+    searchQuery: string,
+    statusFilter: string | null = null
+  ): Task[] {
+    let filteredTasks = tasks;
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filteredTasks = filteredTasks.filter((task) =>
+        task.title.toLowerCase().includes(query)
+      );
     }
 
-    const query = searchQuery.toLowerCase();
-    return tasks.filter((task) => task.title.toLowerCase().includes(query));
+    if (statusFilter) {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.status === statusFilter
+      );
+    }
+
+    return filteredTasks;
   }
 }
