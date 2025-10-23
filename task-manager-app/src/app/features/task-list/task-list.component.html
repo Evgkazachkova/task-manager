@@ -5,11 +5,12 @@
     (statusFilterChange)="onStatusFilterChange($event)"
   ></tm-task-stats>
 
-  <div class="loading-container" *ngIf="isLoading()">
+  @if (isLoading()) {
+  <div class="loading-container">
     <p>Загрузка задач...</p>
   </div>
-
-  <div class="tasks-list" *ngIf="!isLoading()">
+  } @if (!isLoading()) {
+  <div class="tasks-list">
     @if (!hasTasks()) {
     <div class="empty-state">
       <mat-icon>task_alt</mat-icon>
@@ -58,4 +59,5 @@
     </mat-card>
     } }
   </div>
+  }
 </div>

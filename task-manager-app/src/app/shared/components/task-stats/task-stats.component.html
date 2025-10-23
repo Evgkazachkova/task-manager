@@ -1,4 +1,5 @@
-<div class="tasks-stats" *ngIf="tasksStats()">
+@if (tasksStats()) {
+<div class="tasks-stats">
   <mat-chip-set>
     <mat-chip
       [class.active]="!statusFilter()"
@@ -30,3 +31,4 @@
     </mat-chip>
   </mat-chip-set>
 </div>
+}
