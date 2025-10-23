@@ -17,7 +17,18 @@ $theme: mat.m2-define-light-theme(
   )
 );
 
-@include mat.all-component-themes($theme);
+@include mat.button-theme($theme);
+@include mat.card-theme($theme);
+@include mat.chips-theme($theme);
+@include mat.dialog-theme($theme);
+@include mat.form-field-theme($theme);
+@include mat.icon-theme($theme);
+@include mat.input-theme($theme);
+@include mat.progress-bar-theme($theme);
+@include mat.select-theme($theme);
+@include mat.snack-bar-theme($theme);
+@include mat.fab-theme($theme);
+@include mat.icon-button-theme($theme);
 
 html,
 body {
