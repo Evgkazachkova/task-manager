@@ -21,7 +21,7 @@ import {
   UpdateTaskType,
 } from '@core/models/task.model';
 import { TaskStatus } from '@core/models/task-status.enum';
-import { TasksService } from '@core/services/tasks.service';
+import { TasksApiService } from '@core/services/tasks-api.service';
 import { TaskStatusUtils } from '@core/utils/task-status.utils';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from '@core/services/notification.service';
@@ -48,7 +48,7 @@ export class TaskFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly tasksService = inject(TasksService);
+  private readonly tasksApiService = inject(TasksApiService);
   private readonly dialog = inject(MatDialog);
   private readonly notificationService = inject(NotificationService);
 
@@ -81,7 +81,7 @@ export class TaskFormComponent implements OnInit {
     const taskId = this.getTaskIdFromRoute();
     if (!taskId) return;
 
-    this.tasksService
+    this.tasksApiService
       .getTaskById(taskId)
       .pipe(
         take(1),
@@ -116,8 +116,8 @@ export class TaskFormComponent implements OnInit {
     const taskId = this.getTaskIdFromRoute();
 
     const operation = taskId
-      ? this.tasksService.updateTask(taskId, taskData as UpdateTaskType)
-      : this.tasksService.createTask({
+      ? this.tasksApiService.updateTask(taskId, taskData as UpdateTaskType)
+      : this.tasksApiService.createTask({
           ...taskData,
           createdAt: new Date(),
         } as CreateTaskType);

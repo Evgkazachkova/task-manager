@@ -5,7 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { TasksService } from '@app/core/services/tasks.service';
+import { TasksApiService } from '@app/core/services/tasks-api.service';
+import { TasksStateService } from '@app/core/services/tasks-state.service';
+import { TasksFilterService } from '@app/core/services/tasks-filter.service';
 import { TaskStatus } from '@app/core/models/task-status.enum';
 import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,15 +31,20 @@ import { take } from 'rxjs';
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent {
-  private readonly tasksService = inject(TasksService);
+  private readonly tasksApiService = inject(TasksApiService);
+  private readonly tasksStateService = inject(TasksStateService);
+  private readonly tasksFilterService = inject(TasksFilterService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly notificationService = inject(NotificationService);
 
-  readonly tasks = this.tasksService.filteredTasks;
-  readonly isLoading = this.tasksService.isLoading;
-  readonly tasksStats = this.tasksService.tasksStats;
-  readonly statusFilter = this.tasksService.statusFilter;
+  readonly tasks = computed(() => {
+    const allTasks = this.tasksStateService.tasks();
+    return this.tasksFilterService.getFilteredTasks(allTasks);
+  });
+  readonly isLoading = this.tasksStateService.isLoading;
+  readonly tasksStats = this.tasksStateService.tasksStats;
+  readonly statusFilter = this.tasksFilterService.statusFilter;
 
   readonly hasTasks = computed(() => this.tasks().length > 0);
 
@@ -61,7 +68,7 @@ export class TaskListComponent {
       .pipe(take(1))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.tasksService
+          this.tasksApiService
             .deleteTask(taskId)
             .pipe(take(1))
             .subscribe(() => {
@@ -78,6 +85,6 @@ export class TaskListComponent {
   }
 
   onStatusFilterChange(status: string | null): void {
-    this.tasksService.setStatusFilter(status);
+    this.tasksFilterService.setStatusFilter(status);
   }
 }

@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { TasksService } from '@app/core/services/tasks.service';
+import { TasksFilterService } from '@app/core/services/tasks-filter.service';
 
 @Component({
   selector: 'tm-task-search',
@@ -20,18 +20,18 @@ import { TasksService } from '@app/core/services/tasks.service';
   styleUrl: './task-search.component.scss',
 })
 export class TaskSearchComponent {
-  private readonly tasksService = inject(TasksService);
+  private readonly tasksFilterService = inject(TasksFilterService);
 
-  readonly searchQuery = this.tasksService.searchQuery;
+  readonly searchQuery = this.tasksFilterService.searchQuery;
   readonly hasSearchQuery = computed(() => this.searchQuery().length > 0);
 
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     const query = target.value;
-    this.tasksService.setSearchQuery(query);
+    this.tasksFilterService.setSearchQuery(query);
   }
 
   onClearSearch(): void {
-    this.tasksService.clearSearch();
+    this.tasksFilterService.clearSearch();
   }
 }
