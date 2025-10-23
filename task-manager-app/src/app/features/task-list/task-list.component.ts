@@ -11,6 +11,7 @@ import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from '@app/core/services/notification.service';
+import { TaskStatsComponent } from '@app/shared/components/task-stats/task-stats.component';
 import { take } from 'rxjs';
 
 @Component({
@@ -22,6 +23,7 @@ import { take } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
+    TaskStatsComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
@@ -73,15 +75,7 @@ export class TaskListComponent {
     return TaskStatusUtils.getStatusLabel(status);
   }
 
-  filterByStatus(status: string | null): void {
+  onStatusFilterChange(status: string | null): void {
     this.tasksService.setStatusFilter(status);
-  }
-
-  clearStatusFilter(): void {
-    this.tasksService.clearStatusFilter();
-  }
-
-  isStatusFilterActive(status: string): boolean {
-    return this.statusFilter() === status;
   }
 }

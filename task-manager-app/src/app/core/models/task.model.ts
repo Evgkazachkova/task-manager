@@ -15,6 +15,13 @@ export interface TaskForm {
   status: FormControl<TaskStatus>;
 }
 
+export interface TasksStats {
+  total: number;
+  todo: number;
+  inprogress: number;
+  completed: number;
+}
+
 export type CreateTaskType = {
   title: string;
   description?: string;
