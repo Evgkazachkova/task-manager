@@ -1,11 +1,16 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { Router } from '@angular/router';
 import { TasksService } from '@app/core/services/tasks.service';
-import { Task } from '@app/core/models/task.model';
 import { TaskStatus } from '@app/core/models/task-status.enum';
 import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,9 +21,16 @@ import { take } from 'rxjs';
 @Component({
   selector: 'tm-task-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
+  ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent {
   private readonly tasksService = inject(TasksService);
@@ -26,7 +38,11 @@ export class TaskListComponent {
   private readonly dialog = inject(MatDialog);
   private readonly notificationService = inject(NotificationService);
 
-  tasks$ = this.tasksService.tasks$;
+  readonly tasks = this.tasksService.filteredTasks;
+  readonly isLoading = this.tasksService.isLoading;
+  readonly tasksStats = this.tasksService.tasksStats;
+
+  readonly hasTasks = computed(() => this.tasks().length > 0);
 
   editTask(taskId: string): void {
     this.router.navigate(['/tasks/edit', taskId]);

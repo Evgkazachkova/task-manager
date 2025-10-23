@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { tap, map, debounceTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CreateTaskType, Task, UpdateTaskType } from '@core/models/task.model';
 import { environment } from '@environments/environment';
 import { API_ENDPOINTS } from '@app/core/constants/api.constants';
@@ -13,66 +13,83 @@ export class TasksService {
   private readonly httpClient = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  private tasksCache$ = new BehaviorSubject<Task[]>([]);
-  private searchQuery$ = new BehaviorSubject<string>('');
+  readonly tasks = signal<Task[]>([]);
+  readonly searchQuery = signal<string>('');
+  readonly isLoading = signal<boolean>(false);
 
-  get tasks$(): Observable<Task[]> {
-    return combineLatest([
-      this.tasksCache$.asObservable(),
-      this.searchQuery$.pipe(debounceTime(300)),
-    ]).pipe(
-      map(([tasks, searchQuery]) => this.filterTasks(tasks, searchQuery))
-    );
-  }
+  readonly filteredTasks = computed(() => {
+    const tasks = this.tasks();
+    const searchQuery = this.searchQuery();
+    return this.filterTasks(tasks, searchQuery);
+  });
+
+  readonly tasksStats = computed(() => {
+    const tasks = this.tasks();
+    return {
+      total: tasks.length,
+      todo: tasks.filter((task) => task.status === 'todo').length,
+      inprogress: tasks.filter((task) => task.status === 'inprogress').length,
+      completed: tasks.filter((task) => task.status === 'completed').length,
+    };
+  });
 
   getTasks(): Observable<Task[]> {
+    this.isLoading.set(true);
+
     return this.httpClient
       .get<Task[]>(`${this.baseUrl}${API_ENDPOINTS.TASKS}`)
       .pipe(
         tap((tasks) => {
-          this.tasksCache$.next(tasks);
+          this.tasks.set(tasks);
+          this.isLoading.set(false);
         })
       );
   }
 
   getTaskById(id: string): Observable<Task> {
-    return this.httpClient.get<Task>(
-      `${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`
-    );
+    this.isLoading.set(true);
+
+    return this.httpClient
+      .get<Task>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`)
+      .pipe(tap(() => this.isLoading.set(false)));
   }
 
   createTask(task: CreateTaskType): Observable<void> {
-    return this.httpClient.post<void>(
-      `${this.baseUrl}${API_ENDPOINTS.TASKS}`,
-      task
-    );
+    this.isLoading.set(true);
+
+    return this.httpClient
+      .post<void>(`${this.baseUrl}${API_ENDPOINTS.TASKS}`, task)
+      .pipe(tap(() => this.isLoading.set(false)));
   }
 
   updateTask(id: string, task: UpdateTaskType): Observable<void> {
-    return this.httpClient.put<void>(
-      `${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`,
-      task
-    );
+    this.isLoading.set(true);
+
+    return this.httpClient
+      .put<void>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`, task)
+      .pipe(tap(() => this.isLoading.set(false)));
   }
 
   deleteTask(id: string): Observable<void> {
+    this.isLoading.set(true);
+
     return this.httpClient
       .delete<void>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`)
       .pipe(
         tap(() => {
-          const currentTasks = this.tasksCache$.value;
-          const filteredTasks = currentTasks.filter((task) => task.id !== id);
-          this.tasksCache$.next(filteredTasks);
+          const currentTasks = this.tasks();
+          this.tasks.set(currentTasks.filter((task) => task.id !== id));
+          this.isLoading.set(false);
         })
       );
   }
 
   setSearchQuery(query: string): void {
-    this.searchQuery$.next(query.trim());
+    this.searchQuery.set(query.trim());
   }
 
   clearSearch(): void {
-    this.searchQuery$.next('');
+    this.searchQuery.set('');
   }
 
   private filterTasks(tasks: Task[], searchQuery: string): Task[] {

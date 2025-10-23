@@ -4,12 +4,12 @@
     <input
       matInput
       placeholder="Введите название задачи..."
-      [value]="searchQuery"
+      [value]="searchQuery()"
       (input)="onSearchInput($event)"
       aria-label="Поиск задач"
       autocomplete="off"
     />
-    @if (searchQuery) {
+    @if (hasSearchQuery()) {
     <button
       matSuffix
       mat-icon-button

@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -42,6 +47,7 @@ import { take, tap, catchError, of } from 'rxjs';
   ],
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -59,13 +65,10 @@ export class TaskFormComponent implements OnInit {
     status: [TaskStatus.todo],
   });
 
-  get isEditMode(): boolean {
-    return this.getTaskIdFromRoute() !== null;
-  }
-
-  get pageTitle(): string {
-    return this.isEditMode ? 'Редактирование задачи' : 'Создание задачи';
-  }
+  readonly isEditMode = this.getTaskIdFromRoute() !== null;
+  readonly pageTitle = this.isEditMode
+    ? 'Редактирование задачи'
+    : 'Создание задачи';
 
   get titleControl() {
     return this.taskFormGroup.get('title');

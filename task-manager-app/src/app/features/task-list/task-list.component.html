@@ -1,12 +1,26 @@
 <div class="task-list-container">
-  <div class="tasks-list">
-    @if ((tasks$ | async)?.length === 0) {
+
+  <div class="tasks-stats" *ngIf="tasksStats()">
+    <mat-chip-set>
+      <mat-chip>Всего: {{ tasksStats().total }}</mat-chip>
+      <mat-chip>К выполнению: {{ tasksStats().todo }}</mat-chip>
+      <mat-chip>В процессе: {{ tasksStats().inprogress }}</mat-chip>
+      <mat-chip>Завершено: {{ tasksStats().completed }}</mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <div class="loading-container" *ngIf="isLoading()">
+    <p>Загрузка задач...</p>
+  </div>
+
+  <div class="tasks-list" *ngIf="!isLoading()">
+    @if (!hasTasks()) {
     <div class="empty-state">
       <mat-icon>task_alt</mat-icon>
       <h3>Задач не найдено</h3>
       <p>Попробуйте изменить поисковый запрос или создать новую задачу</p>
     </div>
-    } @for (task of tasks$ | async; track task.id) {
+    } @else { @for (task of tasks(); track task.id) {
     <mat-card class="task-card">
       <div class="task-card-main">
         <div class="task-info">
@@ -16,12 +30,9 @@
           </p>
 
           <div class="task-meta">
-            <span
-              class="status-badge"
-              [ngClass]="'status-badge--' + task.status"
-            >
+            <mat-chip [class]="'status-chip--' + task.status">
               {{ getStatusLabel(task.status) }}
-            </span>
+            </mat-chip>
             <span class="task-date">
               <mat-icon>schedule</mat-icon>
               {{ task.createdAt | date : "short" }}
@@ -33,7 +44,7 @@
           <button
             mat-icon-button
             color="primary"
-            title="edit"
+            title="Редактировать"
             (click)="editTask(task.id)"
           >
             <mat-icon>edit</mat-icon>
@@ -41,7 +52,7 @@
           <button
             mat-icon-button
             color="warn"
-            title="delete"
+            title="Удалить"
             (click)="deleteTask(task.id)"
           >
             <mat-icon>delete</mat-icon>
@@ -49,6 +60,6 @@
         </div>
       </div>
     </mat-card>
-    }
+    } }
   </div>
 </div>

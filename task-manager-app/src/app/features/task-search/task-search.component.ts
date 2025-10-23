@@ -1,4 +1,9 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,17 +28,16 @@ import { TasksService } from '@app/core/services/tasks.service';
 export class TaskSearchComponent {
   private readonly tasksService = inject(TasksService);
 
-  searchQuery = '';
+  readonly searchQuery = this.tasksService.searchQuery;
+  readonly hasSearchQuery = computed(() => this.searchQuery().length > 0);
 
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     const query = target.value;
-    this.searchQuery = query;
     this.tasksService.setSearchQuery(query);
   }
 
   onClearSearch(): void {
-    this.searchQuery = '';
     this.tasksService.clearSearch();
   }
 }
