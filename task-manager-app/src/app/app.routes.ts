@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TasksResolver } from '@app/core/resolvers/tasks.resolver';
+import { LayoutComponent } from '@app/layout/layout-component/layout.component';
 
 export const routes: Routes = [
   {
@@ -9,10 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'tasks',
-    loadComponent: () =>
-      import('./layout/layout-component/layout.component').then(
-        (m) => m.LayoutComponent
-      ),
+    component: LayoutComponent,
     resolve: { tasks: TasksResolver },
   },
   {
