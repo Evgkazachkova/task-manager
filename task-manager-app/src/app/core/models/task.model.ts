@@ -7,7 +7,6 @@ export interface Task {
   description?: string;
   status: TaskStatus;
   createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface TaskForm {
@@ -20,6 +19,7 @@ export type CreateTaskType = {
   title: string;
   description?: string;
   status: TaskStatus;
+  createdAt: Date;
 };
 
 export type UpdateTaskType = Partial<CreateTaskType>;

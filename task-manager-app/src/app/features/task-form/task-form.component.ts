@@ -116,7 +116,10 @@ export class TaskFormComponent implements OnInit {
 
     const operation = taskId
       ? this.tasksService.updateTask(taskId, taskData as UpdateTaskType)
-      : this.tasksService.createTask(taskData as CreateTaskType);
+      : this.tasksService.createTask({
+          ...taskData,
+          createdAt: new Date(),
+        } as CreateTaskType);
 
     operation
       .pipe(
