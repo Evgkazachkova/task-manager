@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  ChangeDetectionStrategy,
-  computed,
-} from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +25,6 @@ import { take } from 'rxjs';
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent {
   private readonly tasksService = inject(TasksService);

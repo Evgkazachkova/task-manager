@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  ChangeDetectionStrategy,
-  computed,
-} from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,7 +18,6 @@ import { TasksService } from '@app/core/services/tasks.service';
   ],
   templateUrl: './task-search.component.html',
   styleUrl: './task-search.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskSearchComponent {
   private readonly tasksService = inject(TasksService);

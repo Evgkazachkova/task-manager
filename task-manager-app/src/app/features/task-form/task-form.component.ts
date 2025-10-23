@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -47,7 +42,6 @@ import { take, tap, catchError, of } from 'rxjs';
   ],
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
