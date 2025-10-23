@@ -14,7 +14,6 @@ export class TasksService {
   private readonly baseUrl = environment.apiUrl;
 
   private tasksCache$ = new BehaviorSubject<Task[]>([]);
-  private loadingState$ = new BehaviorSubject<boolean>(false);
   private searchQuery$ = new BehaviorSubject<string>('');
 
   get tasks$(): Observable<Task[]> {
@@ -26,33 +25,23 @@ export class TasksService {
     );
   }
 
-  get loading$(): Observable<boolean> {
-    return this.loadingState$.asObservable();
-  }
-
   getTasks(): Observable<Task[]> {
-    this.loadingState$.next(true);
     return this.httpClient
       .get<Task[]>(`${this.baseUrl}${API_ENDPOINTS.TASKS}`)
       .pipe(
         tap((tasks) => {
           this.tasksCache$.next(tasks);
-          this.loadingState$.next(false);
         })
       );
   }
 
   getTaskById(id: string): Observable<Task> {
-    this.loadingState$.next(true);
-
-    return this.httpClient
-      .get<Task>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`)
-      .pipe(tap(() => this.loadingState$.next(false)));
+    return this.httpClient.get<Task>(
+      `${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`
+    );
   }
 
   createTask(task: CreateTaskType): Observable<void> {
-    this.loadingState$.next(true);
-
     return this.httpClient.post<void>(
       `${this.baseUrl}${API_ENDPOINTS.TASKS}`,
       task
@@ -60,8 +49,6 @@ export class TasksService {
   }
 
   updateTask(id: string, task: UpdateTaskType): Observable<void> {
-    this.loadingState$.next(true);
-
     return this.httpClient.put<void>(
       `${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`,
       task
@@ -69,8 +56,6 @@ export class TasksService {
   }
 
   deleteTask(id: string): Observable<void> {
-    this.loadingState$.next(true);
-
     return this.httpClient
       .delete<void>(`${this.baseUrl}${API_ENDPOINTS.TASK_BY_ID(id)}`)
       .pipe(
@@ -78,7 +63,6 @@ export class TasksService {
           const currentTasks = this.tasksCache$.value;
           const filteredTasks = currentTasks.filter((task) => task.id !== id);
           this.tasksCache$.next(filteredTasks);
-          this.loadingState$.next(false);
         })
       );
   }

@@ -1,3 +1,4 @@
 .layout-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 64px); // Вычитаем высоту хедера
+  padding: 20px 0; // Добавляем отступы
 }
