@@ -50,14 +50,12 @@ export class TaskListComponent {
             .deleteTask(taskId)
             .pipe(take(1))
             .subscribe(() => {
-              this.notificationService.showNotification('Задача успешно удалена');
+              this.notificationService.showNotification(
+                'Задача успешно удалена'
+              );
             });
         }
       });
-  }
-
-  trackByTaskId(task: Task): string {
-    return task.id;
   }
 
   getStatusLabel(status: TaskStatus): string {

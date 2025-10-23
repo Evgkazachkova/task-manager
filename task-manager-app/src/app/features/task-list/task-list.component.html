@@ -1,15 +1,13 @@
 <div class="task-list-container">
   <div class="tasks-list">
-    <div *ngIf="(tasks$ | async)?.length === 0" class="empty-state">
+    @if ((tasks$ | async)?.length === 0) {
+    <div class="empty-state">
       <mat-icon>task_alt</mat-icon>
       <h3>Задач не найдено</h3>
       <p>Попробуйте изменить поисковый запрос или создать новую задачу</p>
     </div>
-
-    <mat-card
-      *ngFor="let task of tasks$ | async; trackBy: trackByTaskId"
-      class="task-card"
-    >
+    } @for (task of tasks$ | async; track task.id) {
+    <mat-card class="task-card">
       <div class="task-card-main">
         <div class="task-info">
           <h3 class="task-info__title">{{ task.title }}</h3>
@@ -51,5 +49,6 @@
         </div>
       </div>
     </mat-card>
+    }
   </div>
 </div>
