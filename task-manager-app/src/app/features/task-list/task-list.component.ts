@@ -10,6 +10,7 @@ import { TaskStatus } from '@app/core/models/task-status.enum';
 import { TaskStatusUtils } from '@app/core/utils/task-status.utils';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/confirm-dialog.component';
+import { NotificationService } from '@app/core/services/notification.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -23,6 +24,7 @@ export class TaskListComponent {
   private readonly tasksService = inject(TasksService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly notificationService = inject(NotificationService);
 
   tasks$ = this.tasksService.tasks$;
 
@@ -44,7 +46,12 @@ export class TaskListComponent {
       .pipe(take(1))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.tasksService.deleteTask(taskId).pipe(take(1)).subscribe();
+          this.tasksService
+            .deleteTask(taskId)
+            .pipe(take(1))
+            .subscribe(() => {
+              this.notificationService.showNotification('Задача успешно удалена');
+            });
         }
       });
   }

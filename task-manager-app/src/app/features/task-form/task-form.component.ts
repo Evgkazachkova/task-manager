@@ -24,7 +24,8 @@ import { TaskStatus } from '@core/models/task-status.enum';
 import { TasksService } from '@core/services/tasks.service';
 import { TaskStatusUtils } from '@core/utils/task-status.utils';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { take, tap } from 'rxjs';
+import { NotificationService } from '@core/services/notification.service';
+import { take, tap, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'tm-task-form',
@@ -48,6 +49,7 @@ export class TaskFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly tasksService = inject(TasksService);
   private readonly dialog = inject(MatDialog);
+  private readonly notificationService = inject(NotificationService);
 
   readonly statusOptions = TaskStatusUtils.getStatusOptions();
 
@@ -83,7 +85,16 @@ export class TaskFormComponent implements OnInit {
 
     this.tasksService
       .getTaskById(taskId)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        catchError((error) => {
+          console.error('Error loading task:', error);
+          this.notificationService.showNotification(
+            'Ошибка при загрузке задачи'
+          );
+          return of(null);
+        })
+      )
       .subscribe((task) => {
         if (task) {
           this.taskFormGroup.patchValue({
@@ -113,7 +124,21 @@ export class TaskFormComponent implements OnInit {
     operation
       .pipe(
         take(1),
-        tap(() => this.router.navigate(['/tasks']))
+        tap(() => {
+          const message = taskId
+            ? 'Задача успешно обновлена'
+            : 'Задача успешно создана';
+          this.notificationService.showNotification(message);
+          this.router.navigate(['/tasks']);
+        }),
+        catchError((error) => {
+          console.error('Error saving task:', error);
+          const message = taskId
+            ? 'Ошибка при обновлении задачи'
+            : 'Ошибка при создании задачи';
+          this.notificationService.showNotification(message);
+          return of(null);
+        })
       )
       .subscribe();
   }

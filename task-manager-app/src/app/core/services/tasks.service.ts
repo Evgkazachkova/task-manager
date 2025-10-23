@@ -39,7 +39,6 @@ export class TasksService {
           this.tasksCache$.next(tasks);
           this.loadingState$.next(false);
         })
-        // TODO написать обработку ошибок
       );
   }
 
