@@ -24,7 +24,7 @@
 
           @if (titleControl?.hasError('required')) {
           <mat-error>Название задачи обязательно</mat-error>
-          } @if (titleControl?.hasError('minlength')) {
+          } @if (titleControl?.hasError('minLengthCustom')) {
           <mat-error> Название должно содержать более 3 символов</mat-error>
           }
         </mat-form-field>

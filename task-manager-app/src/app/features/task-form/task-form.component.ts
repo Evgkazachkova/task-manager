@@ -26,6 +26,7 @@ import { TaskStatusUtils } from '@core/utils/task-status.utils';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from '@core/services/notification.service';
 import { take, tap, catchError, of } from 'rxjs';
+import { minLengthCustom } from '@app/core/validators/custom-validators';
 
 @Component({
   selector: 'tm-task-form',
@@ -54,7 +55,7 @@ export class TaskFormComponent implements OnInit {
   readonly statusOptions = TaskStatusUtils.getStatusOptions();
 
   taskFormGroup: FormGroup<TaskForm> = this.fb.nonNullable.group({
-    title: ['', [Validators.required, Validators.minLength(3)]],
+    title: ['', [Validators.required, minLengthCustom(3)]],
     description: [''],
     status: [TaskStatus.todo],
   });
