@@ -4,25 +4,4 @@
   background: #f8f9fa;
   border-radius: 12px;
   border: 1px solid #e9ecef;
-
-  mat-chip-set {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  mat-chip {
-    font-weight: 500;
-  }
-}
-
-.clickable-chip {
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  &.active {
-    border: 2px solid #3f51b5;
-  }
 }

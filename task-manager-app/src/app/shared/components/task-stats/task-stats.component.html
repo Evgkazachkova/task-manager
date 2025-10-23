@@ -4,28 +4,28 @@
     <mat-chip
       [class.active]="!statusFilter()"
       (click)="clearStatusFilter()"
-      class="clickable-chip"
+      class="chip chip--total chip--animated"
     >
       Всего: {{ tasksStats()!.total }}
     </mat-chip>
     <mat-chip
       [class.active]="isStatusFilterActive('todo')"
       (click)="filterByStatus('todo')"
-      class="clickable-chip"
+      class="chip chip--todo chip--animated"
     >
       К выполнению: {{ tasksStats()!.todo }}
     </mat-chip>
     <mat-chip
       [class.active]="isStatusFilterActive('inprogress')"
       (click)="filterByStatus('inprogress')"
-      class="clickable-chip"
+      class="chip chip--inprogress chip--animated"
     >
       В процессе: {{ tasksStats()!.inprogress }}
     </mat-chip>
     <mat-chip
       [class.active]="isStatusFilterActive('completed')"
       (click)="filterByStatus('completed')"
-      class="clickable-chip"
+      class="chip chip--completed chip--animated"
     >
       Завершено: {{ tasksStats()!.completed }}
     </mat-chip>

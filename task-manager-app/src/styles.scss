@@ -1,6 +1,8 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
+@import "app/shared/styles/chips.scss";
+
 $primary-palette: mat.m2-define-palette(mat.$m2-indigo-palette);
 $accent-palette: mat.m2-define-palette(mat.$m2-pink-palette);
 $warn-palette: mat.m2-define-palette(mat.$m2-red-palette);
@@ -27,15 +29,4 @@ body {
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #fafafa;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
