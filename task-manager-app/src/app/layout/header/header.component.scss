@@ -9,6 +9,7 @@
   &__container {
     max-width: 900px;
     margin: 0 auto;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,6 +49,39 @@
       font-size: 20px;
       width: 20px;
       height: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .header {
+    &__container {
+      flex-direction: column;
+      height: auto;
+      padding: 16px 20px;
+      gap: 16px;
+    }
+  }
+
+  .brand {
+    align-self: flex-start;
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .actions {
+    align-self: stretch;
+
+    &__create-button {
+      width: 100%;
     }
   }
 }
